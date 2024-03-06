@@ -21,14 +21,7 @@
 		<input type="submit" value="등록하기">
 		<input type="button" value="돌아가기">
 	</form:form>
-	
-	
 
-	
-	<form:form commandName="user" >
-    	아이디 : <form:input path="userId" value="" />
-	</form:form>
-	
 
 </body>
 </html>
