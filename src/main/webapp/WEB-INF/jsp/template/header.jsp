@@ -12,7 +12,5 @@
 
 
 <h1>header입니다.</h1>
+<hr>
 
-	
-</body>
-</html>

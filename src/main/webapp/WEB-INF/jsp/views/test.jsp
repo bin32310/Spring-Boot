@@ -11,8 +11,5 @@
 	<h1>test.jsp(jsp/views/test)</h1>
 
 
-
-	
-	
 </body>
 </html>

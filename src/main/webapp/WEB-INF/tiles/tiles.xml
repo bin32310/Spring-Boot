@@ -11,18 +11,20 @@
     	<put-attribute name="body" value="/WEB-INF/jsp/template/body.jsp" />
     	<put-attribute name="footer" value="/WEB-INF/jsp/template/footer.jsp" />
 	</definition>
+	
+	<definition name="noticeLayout" template="/WEB-INF/jsp/template/noticeLayout.jsp">
+    	<put-attribute name="title" value="Notice Tiles Page" />
+    	<put-attribute name="header" value="/WEB-INF/jsp/template/header.jsp" />
+    	<put-attribute name="footer" value="/WEB-INF/jsp/template/footer.jsp" />
+	</definition>
   
   	<definition name="/views/*" extends="layout">
     	<put-attribute name="contents" value="/WEB-INF/jsp/views/{1}.jsp" />
   	</definition>
-<!--   	<definition name="views/*" extends="layout">
-    	<put-attribute name="contents" value="/WEB-INF/jsp/views/{1}.jsp" />
+  	
+  	<definition name="/notice/*" extends="noticeLayout">
+    	<put-attribute name="contents" value="/WEB-INF/jsp/notice/{1}.jsp" />
   	</definition>
-  	<definition name="views/*/*" extends="layout">
-    	<put-attribute name="contents" value="/WEB-INF/jsp/views/{1}/{2}.jsp" />
-  	</definition>
-  	<definition name="views/*/*/*" extends="layout">
-    	<put-attribute name="contents" value="/WEB-INF/jsp/views/{1}/{2}/{3}.jsp" />
-  	</definition> -->
+
   
 </tiles-definitions>

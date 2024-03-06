@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- BoardMapper.xml -->
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  	<mapper namespace="com.example.demo.persistence.NoticeVO">
+  	
+  	<resultMap type="com.example.demo.domain.NoticeVO" id="NoticeVO">
+  		<result property="no_num" column="no_num"/>
+  		<result property="no_title" column="no_title"/>
+  		<result property="no_content" column="no_content"/>
+  		<result property="no_file" column="no_file"/>
+  		<result property="no_state" column="no_state"/>
+  	</resultMap>
+
+
+	<!-- 전체 글 수 조회 -->
+	<select id="noticeCount" resultType="int">
+		SELECT /* noticeCount */
+			COUNT(*)
+		FROM
+			NOTICE
+		WHERE
+			NO_STATE ="upload"
+	</select>
+	
+	<!-- 전체 글 목록 -->
+ 	<select id="noticeList" resultMap="NoticeVO" >
+		SELECT /* noticeList */
+			NO_NUM,
+			NO_TITLE
+		FROM 
+			NOTICE
+		WHERE 
+			NO_STATE = "upload"
+		ORDER BY
+			NO_NUM DESC
+		LIMIT
+		#{pageStart},#{pageSize} 
+	</select> 
+
+
+	<!-- 글쓰기 -->
+	<insert id="write">
+		INSERT INTO /* write */
+			NOTICE
+			(NO_TITLE, NO_CONTENT)
+		VALUES
+			(#no_title}, #{no_content})
+	</insert>
+
+	<!-- 글읽기 -->
+	<select id="read" resultMap="NoticeVO">
+		SELECT /* read */
+			NO_NUM,
+			NO_TITLE,
+			NO_CONTENT,
+			NO_STATE
+		FROM
+			NOTICE 
+		WHERE NO_NUM = #{no_num}
+	</select>
+
+	<!-- 글삭제 -->
+	<update id="delete">
+		UPDATE /* delete */
+			NOTICE
+		SET
+			NO_STATE = "delete" 
+		WHERE
+			NO_NUM = #{no_num}
+	</update>
+
+	<!-- 글수정 -->
+	<update id="update">
+		UPDATE /* update */
+			NOTICE
+		SET
+			NO_TITLE = #{no_title},
+			NO_CONTENT = #{no_content},
+		WHERE
+			NO_NUM = #{no_num}
+	</update>
+	
+
+	
+
+  </mapper>
