@@ -1,11 +1,14 @@
 package com.example.demo.domain;
 
+import org.apache.ibatis.type.Alias;
+
 import lombok.Data;
 
 /*
  * 페이징처리 (+페이지 블럭)
  */
 @Data
+@Alias("pageVO")
 public class PageVO {
 	
 	   private int totalCount;   // 총 글의 수

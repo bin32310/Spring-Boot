@@ -1,34 +1,39 @@
 package com.example.demo.controller;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.domain.Criteria;
 import com.example.demo.domain.NoticeVO;
 import com.example.demo.domain.PageVO;
 import com.example.demo.service.NoticeServiceImpl;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
+@Slf4j
+@RequiredArgsConstructor
 @RequestMapping("/notice")
 public class NoticeController {
 
 	private static final Logger logger = LoggerFactory.getLogger(NoticeController.class);
-
-	@Inject
-	private NoticeServiceImpl nService;
-
 	
+	private final NoticeServiceImpl nService;
+
 	// http://localhost:8080/notice/main	
 	// 메인 GET
-	@RequestMapping(value = "main", method = RequestMethod.GET)
+	@GetMapping("/main")
 	public String mainGET(Criteria cri, Model model, HttpSession session) throws Exception {
 		
 		// 페이징 처리( 페이지 블럭 처리 객체 )
@@ -48,46 +53,56 @@ public class NoticeController {
 		
 		//  전체 글 목록
 		model.addAttribute("noticeList", nService.noticeList(cri));
+		logger.info("nService.noticeList(cri) : " + nService.noticeList(cri));
 		return "/notice/main";
 	}
+	/*
+	 * 게시글 등록 폼
+	 * 
+	 * @param noticeVO
+	 * @param model
+	 * @return
+	 */
 	
 	// 글쓰기 GET
-	@RequestMapping(value = "write", method = RequestMethod.GET)
-	public String writeGET() throws Exception {
-		logger.debug("writeGET()호출");
-		
+	@GetMapping("/write")
+	public String writeGET(Model model) throws Exception {
+		model.addAttribute("noticeVO", new NoticeVO());
 		return "/notice/write";
 	}
 
 	// 글쓰기 POST
-	@ResponseBody
-	@RequestMapping(value = "write", method = RequestMethod.POST)
-	public int boWritePOST(NoticeVO noticeVO, HttpSession session) throws Exception {
-		logger.debug("writePOST(NoticeVO noticeVO)호출");
+	@PostMapping("/write")
+	public String writePOST(@Valid @ModelAttribute("noticeVO") NoticeVO noticeVO, BindingResult bindingResult) throws Exception {
+		logger.info("글 정보 noticeVO : " + noticeVO);
 		
-		logger.debug("글 정보 boardVO : " + noticeVO);
-		if (nService.write(noticeVO) == 1) {
-			return 1;
+		// 검증 실패시 다시 입력 페이지로 
+		if(bindingResult.hasErrors()) {
+			logger.info("errors={}", bindingResult);
+			return "/notice/write";
 		}
-		return 0;
+
+		// 검증 성공시
+		nService.write(noticeVO);
+		return "redirect:/notice/main";
 	}
 
 	// 글 읽기 GET
-	@RequestMapping(value = "read", method = RequestMethod.GET)
-	public String read(Integer no_num, Model model, HttpSession session) throws Exception {
-		model.addAttribute("notice",  nService.read(no_num));
+	@GetMapping("/read")
+	public String read(Integer noNum, Model model, HttpSession session) throws Exception {
+		model.addAttribute("notice",  nService.read(noNum));
 		return "/notice/read";
 	}
 	
 	// 글 삭제 POST
-	@RequestMapping(value = "delete", method = RequestMethod.POST)
-	public int deletePOST(Integer no_num) throws Exception {
+	@PostMapping("/delete")
+	public int deletePOST(Integer noNum) throws Exception {
 		logger.debug("deletePOST(Integer no_num)호출");
-		return nService.delete(no_num);
+		return nService.delete(noNum);
 	}
 	
 	// 글 수정 POST
-	@RequestMapping(value = "boUpdate", method = RequestMethod.POST)
+	@PostMapping("update")
 	public int boUpdatePOST(NoticeVO noticeVO) throws Exception {
 		logger.debug("boUpdatePOST(NoticeVO noticeVO)호출");
 		return nService.update(noticeVO);

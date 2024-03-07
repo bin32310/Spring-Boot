@@ -48,10 +48,10 @@
 		    <tbody>
 		    <c:forEach var="list" items="${noticeList }">
 		         <tr>
-		             <td class="no"><c:out value="${list.no_num}"/> </td>
+		             <td class="no"><c:out value="${list.noNum}"/> </td>
 		             <td class="title">
-		             	 <a href="/notice/read?no_num=${list.no_num}">
-			             	 <c:out value="${list.no_title}"/>
+		             	 <a href="/notice/read?noNum=${list.noNum}">
+			             	 <c:out value="${list.noTitle}"/>
 		             	 </a>
 	             	 </td>
 		         </tr>

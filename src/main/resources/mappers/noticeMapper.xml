@@ -5,16 +5,8 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
-  	<mapper namespace="com.example.demo.persistence.NoticeVO">
-  	
-  	<resultMap type="com.example.demo.domain.NoticeVO" id="NoticeVO">
-  		<result property="no_num" column="no_num"/>
-  		<result property="no_title" column="no_title"/>
-  		<result property="no_content" column="no_content"/>
-  		<result property="no_file" column="no_file"/>
-  		<result property="no_state" column="no_state"/>
-  	</resultMap>
-
+  	<mapper namespace="com.example.demo.persistence.NoticeDAOImpl">
+  
 
 	<!-- 전체 글 수 조회 -->
 	<select id="noticeCount" resultType="int">
@@ -27,32 +19,37 @@
 	</select>
 	
 	<!-- 전체 글 목록 -->
- 	<select id="noticeList" resultMap="NoticeVO" >
+ 	<select id="noticeList" parameterType="com.example.demo.domain.Criteria" resultType="com.example.demo.domain.NoticeVO">
 		SELECT /* noticeList */
 			NO_NUM,
 			NO_TITLE
 		FROM 
 			NOTICE
-		WHERE 
+		WHERE  
 			NO_STATE = "upload"
 		ORDER BY
 			NO_NUM DESC
 		LIMIT
-		#{pageStart},#{pageSize} 
+			#{pageStart},#{pageSize} 
 	</select> 
 
-
-	<!-- 글쓰기 -->
-	<insert id="write">
+	<!-- 게시글을 등록한다 -->
+	<insert id="write" parameterType="com.example.demo.domain.NoticeVO">
 		INSERT INTO /* write */
 			NOTICE
-			(NO_TITLE, NO_CONTENT)
+		(
+			NO_TITLE
+			, NO_CONTENT
+		) 
 		VALUES
-			(#no_title}, #{no_content})
+		(
+			#{noTitle}
+			, #{noContent}
+		)
 	</insert>
 
 	<!-- 글읽기 -->
-	<select id="read" resultMap="NoticeVO">
+	<select id="read" parameterType="int" resultType="com.example.demo.domain.NoticeVO">
 		SELECT /* read */
 			NO_NUM,
 			NO_TITLE,
@@ -60,28 +57,28 @@
 			NO_STATE
 		FROM
 			NOTICE 
-		WHERE NO_NUM = #{no_num}
+		WHERE NO_NUM = #{noNum}
 	</select>
 
 	<!-- 글삭제 -->
-	<update id="delete">
+	<update id="delete" parameterType="int">
 		UPDATE /* delete */
 			NOTICE
 		SET
 			NO_STATE = "delete" 
 		WHERE
-			NO_NUM = #{no_num}
+			NO_NUM = #{noNum}
 	</update>
 
 	<!-- 글수정 -->
-	<update id="update">
+	<update id="update" parameterType="int">
 		UPDATE /* update */
 			NOTICE
 		SET
-			NO_TITLE = #{no_title},
-			NO_CONTENT = #{no_content},
+			NO_TITLE = #{noTitle},
+			NO_CONTENT = #{noContent},
 		WHERE
-			NO_NUM = #{no_num}
+			NO_NUM = #{noNum}
 	</update>
 	
 

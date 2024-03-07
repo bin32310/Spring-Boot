@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.domain.Criteria;
 import com.example.demo.domain.NoticeVO;
 
+
 @Repository(value="noticeDAO")
 public class NoticeDAOImpl {
 
@@ -22,42 +23,42 @@ public class NoticeDAOImpl {
 	@Inject
 	private SqlSession sqlSession;
 	
-	private static final String NAMESPACE = "com.example.demo.persistence.NoticeVO";
+	private static final String NAMESPACE = "com.example.demo.persistence.NoticeDAOImpl";
 	
 
 	// 글 목록 조회
 	public List<NoticeVO> noticeList(Criteria cri) {
-		logger.debug("noticeList(Criteria cri) 호출");
+		logger.info("noticeList(Criteria cri) 호출");
 		return sqlSession.selectList(NAMESPACE + ".noticeList", cri);
 	}
 	
 	// 글 수
 	public int noticeCount() {
-		logger.debug("noticeCount() 호출");
+		logger.info("noticeCount() 호출");
 		return sqlSession.selectOne(NAMESPACE + ".noticeCount");
 	}
 	
 	// 글쓰기
 	public int write(NoticeVO noticeVO) {
-		logger.debug("write(NoticeVO noticeVO) 호출");
+		logger.info("write(NoticeVO noticeVO) 호출" + noticeVO);
 		return sqlSession.insert(NAMESPACE + ".write", noticeVO);
 	}
 	
 	// 글읽기
-	public NoticeVO read(Integer no_num) {
-		logger.debug("read(Integer no_num) 호출 ");
-		return 	sqlSession.selectOne(NAMESPACE + ".read", no_num);
+	public NoticeVO read(Integer noNum) {
+		logger.info("read(Integer no_num) 호출 ");
+		return 	sqlSession.selectOne(NAMESPACE + ".read", noNum);
 	}
 	
 	// 글삭제
-	public int delete(Integer no_num) {
-		logger.debug("delete(Integer no_num) 호출 ");
-		return 	sqlSession.update(NAMESPACE + ".delete", no_num);
+	public int delete(Integer noNum) {
+		logger.info("delete(Integer no_num) 호출 ");
+		return 	sqlSession.update(NAMESPACE + ".delete", noNum);
 	}
 	
 	// 글수정
 	public int update(NoticeVO noticeVO) {
-		logger.debug("update(NoticeVO noticeVO) 호출 ");
+		logger.info("update(NoticeVO noticeVO) 호출 ");
 		return 	sqlSession.update(NAMESPACE + ".update", noticeVO);
 	}
 	

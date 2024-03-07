@@ -9,9 +9,9 @@
 <body>
 	<h1>read.jsp</h1>
 	
-	제목 <input type="text" value="${notice.no_title }" disabled="disabled"> <br>
+	제목 <input type="text" value="${notice.noTitle }" disabled="disabled"> <br>
 	내용 <textarea disabled="disabled">
-			${notice.no_content }
+			${notice.noContent }
 		</textarea> 
 	<br>
 	<hr>
