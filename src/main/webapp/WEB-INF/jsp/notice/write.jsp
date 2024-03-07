@@ -14,8 +14,8 @@
 	<h1>write.jsp</h1>
 	
 	<form:form action="/notice/write" >
-		제목 <input type="text" value="" > <br>
-		내용 <textarea></textarea> 
+		제목 <form:input path="no_title"/> <br>
+		내용 <form:textarea path="no_content"/>
 		<br>
 		<hr>
 		<input type="submit" value="등록하기">
