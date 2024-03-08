@@ -4,20 +4,35 @@ import javax.sql.DataSource;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @MapperScan("com.example.demo.persistence") // 연결할 DAO 인터페이스를 담은 패키지 등록
 public class MySQLConfig {
 
-	
-	
-	@Bean
-    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+	// SqlSessionFactory
+	//  SqlSessionFactory는 마이바티스에서 핵심 역할을 하는 객체로
+	//  데이터베이스 연결 및 SQL 실행을 관리한다.
+	//  스프링부트와 마이바티스를 연동할 때 SqlSessionFactory를 빈으로 등록해야한다.
+	@Bean(name ="sqlSessionFactory")
+	@Primary
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource")DataSource dataSource,
+    											ApplicationContext applicationContext,
+    											@Value("${mybatis.type-aliases-package}") String typeAliasesPackage,
+                                                @Value("${mybatis.mapper-locations}") String mapperLocations,
+                                                @Value("${mybatis.config-location}") String configLocation
+    											) throws Exception {
         
 		// SqlSessionFactory : Mysql과 Mybatis를 연결해주는 객체
 		// SqlSessionFactoryBean : SqlSessionFactory 를 생성해주는 클래스
@@ -36,7 +51,34 @@ public class MySQLConfig {
      
         Resource myBatisConfig = new PathMatchingResourcePatternResolver().getResource("classpath:mybatis-config.xml");
         sessionFactory.setConfigLocation(myBatisConfig);
+        
+        
+        // alias 연결
+        sessionFactory.setTypeAliasesPackage(typeAliasesPackage);
+       
 
         return sessionFactory.getObject();
     }
+	
+
+	
+	
+	// SqlSessionTemplate
+	//  SqlSessionTemplate은 마이바티스에서 제공하는 SqlSession 인터페이스의 구현체로 
+	//  SQL 실행 및 트랜잭션 관리를 담당한다.
+	//  스프링 부트와 마이바티스를 연동할 때 SqlSessionTemplate 빈을 등록해야한다.
+	@Bean
+	public SqlSessionTemplate sqlSessionTemplate (SqlSessionFactory sqlSessionFactory) {
+		return new SqlSessionTemplate(sqlSessionFactory);
+	}
+	
+	
+	// DataSourceTransactionManager  생성 - @Transactional 어노테이션을 사용하여 트랜잭션을 간편하게 관리할 수 있다.
+	// 스프링에서 트랜잭션을 관리하기 위해 DataSourceTransactionManage을 이용하여 DataSource를 설정해야한다.
+	@Bean
+	public PlatformTransactionManager transactionManager(DataSource dataSource) {
+		return new DataSourceTransactionManager(dataSource);
+	}
+
+
 }

@@ -17,6 +17,7 @@ import com.example.demo.domain.Criteria;
 import com.example.demo.domain.NoticeVO;
 import com.example.demo.domain.PageVO;
 import com.example.demo.service.NoticeServiceImpl;
+import com.example.demo.validator.MecNoticeValidator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class NoticeController {
 	private static final Logger logger = LoggerFactory.getLogger(NoticeController.class);
 	
 	private final NoticeServiceImpl nService;
+	private final MecNoticeValidator noticeValidator;
 
 	// http://localhost:8080/notice/main	
 	// 메인 GET
@@ -76,11 +78,14 @@ public class NoticeController {
 	public String writePOST(@Valid @ModelAttribute("noticeVO") NoticeVO noticeVO, BindingResult bindingResult) throws Exception {
 		logger.info("글 정보 noticeVO : " + noticeVO);
 		
-		// 검증 실패시 다시 입력 페이지로 
+		// 검증 실패시 다시 입력 페이지로
+		noticeValidator.validate(noticeVO, bindingResult);
 		if(bindingResult.hasErrors()) {
 			logger.info("errors={}", bindingResult);
 			return "/notice/write";
 		}
+		
+		
 
 		// 검증 성공시
 		nService.write(noticeVO);

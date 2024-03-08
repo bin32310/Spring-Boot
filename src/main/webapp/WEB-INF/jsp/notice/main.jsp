@@ -35,7 +35,7 @@
 
 
 <div class="container">
-	<input type="button" value="글쓰기" onclick="location.href='/notice/write';"> <br>
+	<input type="button" value="글쓰기" onclick="location.href='/notice/write';"> <br><br>
 	<div class="view">
 		<!-- 게시판 리스트 -->
 		<table class="table">

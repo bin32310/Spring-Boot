@@ -19,13 +19,14 @@
 <body>
 	<h1>write.jsp</h1>
 	
-	<form:form action="/notice/write" method="post" modelAttribute="noticeVO" enctype="">
-		제목 <form:input path="noTitle" placeholder="제목"/> 
+	<form:form action="/notice/write" method="post" modelAttribute="noticeVO" enctype="multipart/form-data">
+		제목 <form:input path="noTitle" title="제목" placeholder="제목" /> 
 		<form:errors path="noTitle" class="error_text"/> <br><br>
-		내용 <form:textarea path="noContent" />
-		<form:errors path="noContent" class="error_text"/> <br>
-		<br>
-		<hr>
+		내용 <form:textarea path="noContent" title="내용" />
+		<form:errors path="noContent" class="error_text"/> <br><br>
+		<input type="file" />
+		
+		<br><br>
 		<input type="submit" value="등록하기">
 		<input type="button" value="돌아가기" onclick="location.href='/notice/main'">
 	</form:form>

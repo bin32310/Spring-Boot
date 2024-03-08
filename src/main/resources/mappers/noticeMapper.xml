@@ -19,7 +19,7 @@
 	</select>
 	
 	<!-- 전체 글 목록 -->
- 	<select id="noticeList" parameterType="com.example.demo.domain.Criteria" resultType="com.example.demo.domain.NoticeVO">
+ 	<select id="noticeList" parameterType="CriVO" resultType="noticeVO">
 		SELECT /* noticeList */
 			NO_NUM,
 			NO_TITLE
@@ -34,7 +34,7 @@
 	</select> 
 
 	<!-- 게시글을 등록한다 -->
-	<insert id="write" parameterType="com.example.demo.domain.NoticeVO">
+	<insert id="write" parameterType="noticeVO">
 		INSERT INTO /* write */
 			NOTICE
 		(
@@ -47,9 +47,35 @@
 			, #{noContent}
 		)
 	</insert>
+	
+	<!-- 파일 업로드 -->
+	<insert id="fileUpload" parameterType="List">
+		INSERT INTO /* fileUpload */
+			FILE
+		(
+			FILE_NUM
+			, NO_NUM
+			, FILE_NAME
+			, FILE_STATE
+			, FILE_PATH
+			, FILE_UUID
+		) 
+		VALUES
+		<foreach item="file" collection="list" separator=",">
+		(
+			#{fileNum}
+			, #{noNum}
+			, #{fileName}
+			, #{fileState}
+			, #{filePath}
+			, #{fileUuid}
+		)
+		</foreach>
+	</insert>
+	
 
 	<!-- 글읽기 -->
-	<select id="read" parameterType="int" resultType="com.example.demo.domain.NoticeVO">
+	<select id="read" parameterType="int" resultType="noticeVO">
 		SELECT /* read */
 			NO_NUM,
 			NO_TITLE,
